@@ -19,7 +19,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
 
     result = hf_client.chat.completions.create(
-        model="google/gemma-2b-it",
+        model="deepseek-ai/DeepSeek-R1-0528",
         messages=[{"role": "user", "content": user_input}]
     )
     reply = result.choices[0].message.content

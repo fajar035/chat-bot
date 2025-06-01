@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: telegram-gemma-bot
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python bot.py"
+    envVars:
+      - key: TELEGRAM_TOKEN
+        fromEnv: TELEGRAM_TOKEN
+      - key: HF_TOKEN
+        fromEnv: HF_TOKEN

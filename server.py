@@ -1,3 +1,4 @@
+# bot.py
 import os
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
@@ -6,23 +7,26 @@ from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filte
 
 load_dotenv()
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 HF_TOKEN = os.getenv("HF_TOKEN")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-hf_client = InferenceClient(
-    provider="together",
-    api_key=HF_TOKEN
+client = InferenceClient(
+    model="deepseek-ai/DeepSeek-R1-0528",
+    token=HF_TOKEN,
+    provider="together"
 )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_input = update.message.text
     chat_id = update.message.chat_id
 
-    result = hf_client.chat.completions.create(
-        model="deepseek-ai/DeepSeek-R1-0528",
-        messages=[{"role": "user", "content": user_input}]
+    response = client.chat.completions.create(
+        messages=[
+            {"role": "user", "content": user_input}
+        ]
     )
-    reply = result.choices[0].message.content
+
+    reply = response.choices[0].message.content
     await context.bot.send_message(chat_id=chat_id, text=reply)
 
 if __name__ == '__main__':
